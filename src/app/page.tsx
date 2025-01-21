@@ -15,7 +15,9 @@ const Home = () => {
       setTopPicksData(res);
     }
     fetchData();
-  }, []);
+  }, [topPicksData]);
+
+  console.log("topPicksData", topPicksData)
 
   const products2 = [
     {
@@ -121,7 +123,7 @@ const Home = () => {
 
       {/* Top picks */}
 
-      {topPicksData}
+      {topPicksData} 
 
       {/* new arrivals */}
 
