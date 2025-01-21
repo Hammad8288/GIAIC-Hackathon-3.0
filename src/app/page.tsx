@@ -17,7 +17,6 @@ const Home = () => {
     fetchData();
   }, [topPicksData]);
 
-  console.log("topPicksData", topPicksData)
 
   const products2 = [
     {

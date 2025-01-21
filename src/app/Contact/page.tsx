@@ -9,6 +9,7 @@ import Image from "next/image";
 const page = () => {
   return (
     <>
+      {/* Hero Image Section */}
       <div className="relative">
         <Image
           src={"/Spic1.png"}
@@ -23,18 +24,20 @@ const page = () => {
             alt="pic2"
             width={77}
             height={77}
-            className="w-[7%] md:w-[77px] md:h-[77px] "
+            className="w-[7%] md:w-[77px] md:h-[77px]"
           />
           <p className="font-[500] text-[24px] sm:text-[36px] md:text-[48px] lg:text-[56px] leading-[36px] sm:leading-[48px] md:leading-[72px] lg:leading-[80px] text-black">
             Contact
           </p>
-          <div className="text-[12px] sm:text-[16px]  text-gray-600 flex items-center space-x-1">
+          <div className="text-[12px] sm:text-[16px] text-gray-600 flex items-center space-x-1">
             <p>Home</p>
             <FaChevronRight className="text-gray-800" />
             <p>Contact</p>
           </div>
         </div>
       </div>
+
+      {/* Main Content */}
       <div className="relative">
         <div className="max-w-full lg:max-w-[1440px] h-auto lg:h-[1144px] bg-[#FFFFFF]">
           <div className="flex flex-col items-center justify-center m-auto space-y-4 mt-8 px-4 sm:px-8 md:px-16">
@@ -47,6 +50,7 @@ const page = () => {
               Out. Do Not Hesitate!
             </p>
           </div>
+
           <div className="w-full sm:w-[1058px] sm:h-[923px] m-auto flex flex-col sm:flex-col lg:flex-row gap-10 sm:gap-12 mt-10 p-4 md:p-8">
             {/* Contact Info Section */}
             <div className="flex flex-col w-full sm:w-[393px] h-auto sm:h-[537px] gap-10">

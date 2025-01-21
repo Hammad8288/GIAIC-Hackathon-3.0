@@ -17,6 +17,7 @@ const CheckoutPage = () => {
 
   return (
     <>
+      {/* Hero Section */}
       <div className="relative">
         <Image
           src={"/Spic1.png"}
@@ -31,12 +32,12 @@ const CheckoutPage = () => {
             alt="pic2"
             width={77}
             height={77}
-            className="w-[7%] md:w-[77px] md:h-[77px] "
+            className="w-[7%] md:w-[77px] md:h-[77px]"
           />
           <p className="font-[500] text-[24px] sm:text-[36px] md:text-[48px] lg:text-[56px] leading-[36px] sm:leading-[48px] md:leading-[72px] lg:leading-[80px] text-black">
             CheckOut
           </p>
-          <div className="text-[12px] sm:text-[16px]  text-gray-600 flex items-center space-x-1">
+          <div className="text-[12px] sm:text-[16px] text-gray-600 flex items-center space-x-1">
             <p>Home</p>
             <FaChevronRight className="text-gray-800" />
             <p>CheckOut</p>
@@ -45,10 +46,10 @@ const CheckoutPage = () => {
       </div>
 
       {/* Billing Details */}
-      <div className="flex flex-wrap gap-12 py-16 px-16">
+      <div className="flex flex-wrap gap-12 py-16 px-4 sm:px-8 md:px-16">
         {/* Left Section: Billing Details */}
-        <div className="flex-1 min-w-[300px]">
-          <h2 className="text-[36px] font-[600] mb-6">Billing details</h2>
+        <div className="flex-1 min-w-[300px] md:min-w-[400px]">
+          <h2 className="text-[32px] sm:text-[36px] font-[600] mb-6">Billing details</h2>
           <form className="space-y-6">
             <div className="flex flex-wrap gap-3">
               <div className="flex-1 min-w-[200px]">
@@ -213,7 +214,7 @@ const CheckoutPage = () => {
 
         {/* Right Section: Order Details */}
         <div className="flex-1 min-w-[300px] p-2 rounded-md">
-          <h2 className="text-[32px] font-[600] mb-9">Product</h2>
+          <h2 className="text-[32px] sm:text-[36px] font-[600] mb-9">Product</h2>
 
           {cartItems.map((item: any) => {
             return (
