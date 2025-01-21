@@ -1,4 +1,3 @@
-"use client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the cart item and state interfaces
@@ -12,6 +11,11 @@ interface CartItem {
 
 interface CartState {
   items: CartItem[];
+}
+
+interface UpdateQuantityPayload {
+  id: string;
+  type: "increase" | "decrease";
 }
 
 // Function to load cart items from localStorage (client-side only)
@@ -51,7 +55,7 @@ const cartSlice = createSlice({
     addToCart: (state, action: PayloadAction<CartItem>) => {
       const existingItem = state.items.find(item => item.id === action.payload.id);
       if (existingItem) {
-        existingItem.quantity += 1; // Increase quantity if item already exists
+        existingItem.quantity += 1;
       } else {
         state.items.push({ ...action.payload, quantity: 1 });
       }
@@ -77,25 +81,9 @@ const cartSlice = createSlice({
       }
       saveToLocalStorage(state.items); // Save updated cart to localStorage
     },
-
-    // Add to favourites and remove from favourites
-    addToFavourites: (state, action: PayloadAction<CartItem>) => {
-      // Check if the item is already in the favourites
-      const existingItem = state.items.find(item => item.id === action.payload.id);
-      if (!existingItem) {
-        state.items.push({ ...action.payload });
-      }
-      saveToLocalStorage(state.items); // Save updated favourites to localStorage
-    },
-    removeFromFavourites: (state, action: PayloadAction<string>) => {
-      // Remove item by id
-      state.items = state.items.filter(item => item.id !== action.payload);
-      saveToLocalStorage(state.items); // Save updated favourites to localStorage
-    },
   },
 });
 
 // Export the actions and reducer
-export const { addToCart, removeFromCart, clearCart, updateQuantity, addToFavourites, removeFromFavourites } = cartSlice.actions;
-
+export const { addToCart, removeFromCart, clearCart, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

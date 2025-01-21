@@ -1,82 +1,65 @@
 "use client";
+
 import React from "react";
-import Image from "next/image";
-import { FaChevronRight } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { addToFavourites, removeFromFavourites } from "@/app/redux/cartSlice";
+import { removeFromFavourites } from "@/app/redux/favouriteSlice";
+import { IoIosHeartEmpty, IoIosHeart } from "react-icons/io";
+import { toast } from "sonner";
+import Image from "next/image";
 
-const Favourite = (items:any) => {
+const FavouritesPage = () => {
   const dispatch = useDispatch();
-  const favourites = useSelector((state: any) => state.cart.items);
-  const isFavourite = favourites.some((favProduct:any) => favProduct.id === items.id);
+  
+  // Get favourite items from Redux store
+  const favourites = useSelector((state: any) => state.favourites.items);
 
-  // Handle adding/removing product from favourites
-  const handleFavouriteToggle = () => {
-    if (isFavourite) {
-      dispatch(removeFromFavourites(items)); // Remove from favourites
-    } else {
-      dispatch(addToFavourites(items)); // Add to favourites
-    }
+  // Remove item from favourites
+  const handleRemoveFromFavourites = (id: string) => {
+    dispatch(removeFromFavourites(id));
+    toast.success("Product removed from favourites");
   };
+
   return (
-    <div>
-      <div className="relative">
-        <Image
-          src={"/Spic1.png"}
-          alt="pic1"
-          width={1440}
-          height={316}
-          className="w-full h-auto object-cover"
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <Image
-            src={"/Spic2.png"}
-            alt="pic2"
-            width={77}
-            height={77}
-            className="w-[7%] md:w-[77px] md:h-[77px] "
-          />
-          <p className="font-[500] text-[24px] sm:text-[36px] md:text-[48px] lg:text-[56px] leading-[36px] sm:leading-[48px] md:leading-[72px] lg:leading-[80px] text-black">
-            Favourites
-          </p>
-          <div className="text-[12px] sm:text-[16px]  text-gray-600 flex items-center space-x-1">
-            <p>Home</p>
-            <FaChevronRight className="text-gray-800" />
-            <p>Favourites</p>
-          </div>
-        </div>
-      </div>
+    <div className="container mx-auto py-16">
+      <h1 className="text-2xl font-bold text-center mb-8">Your Favourites</h1>
 
-      {/* Favourite section */}
-
-      {/* <div className="flex-1 min-w-[300px] p-2 rounded-md">
-        <h2 className="text-[32px] font-[600] mb-9">Product</h2>
-
-        {favourites.map((item: any) => {
-          return (
-            <div className="mb-8 text-[16px]" key={item.id}>
-              <div className="flex justify-between mb-4">
+      {favourites.length === 0 ? (
+        <p className="text-center text-gray-500">No favourite products yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {favourites.map((item: any) => (
+            <div key={item.id} className="border p-4 rounded-lg shadow-lg">
+              <div className="w-full h-[200px] mb-4 relative">
                 <Image
                   src={item.imageURL}
                   alt={item.name}
                   width={200}
                   height={200}
-                  className="w-20 h-20 object-cover rounded"
+                  className="object-cover rounded-md"
                 />
               </div>
-              <h3 className="text-sm font-medium">{item.name}</h3>
-              <p className="text-sm font-light text-gray-500">{item.price}</p>a
-              <hr />
+              <h2 className="text-xl font-semibold">{item.name}</h2>
+              <p className="text-lg text-green-500">${item.price}</p>
+
+              {/* Favourite Icon and Remove Button */}
+              <div className="mt-4 flex justify-between items-center">
+                <button
+                  onClick={() => handleRemoveFromFavourites(item.id)}
+                  className="text-red-500 hover:text-red-700 transition"
+                >
+                  Remove from Favourites
+                </button>
+                <IoIosHeart
+                  className="text-red-500 cursor-pointer"
+                  onClick={() => handleRemoveFromFavourites(item.id)}
+                />
+              </div>
             </div>
-          );
-        })}
-      </div> */}
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-export default Favourite;
-
-
-
-
+export default FavouritesPage;
