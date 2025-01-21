@@ -11,7 +11,7 @@ import { RxLinkedinLogo } from "react-icons/rx";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { IoIosHeartEmpty } from "react-icons/io";
 import AboveFooter from "./Components/AboveFooter";
-import { toast } from "sonner"
+import { toast } from "sonner";
 
 
 const ProductsUI = ({ productdata }: { productdata: any }) => {

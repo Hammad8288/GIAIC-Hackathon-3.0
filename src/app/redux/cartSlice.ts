@@ -79,17 +79,19 @@ const cartSlice = createSlice({
     },
 
     // Add to favourites and remove from favourites
-    addToFavourites: (state, action: PayloadAction<CartItem>) =>{
+    addToFavourites: (state, action: PayloadAction<CartItem>) => {
+      // Check if the item is already in the favourites
       const existingItem = state.items.find(item => item.id === action.payload.id);
       if (!existingItem) {
-        state.items.push({ ...action.payload, quantity: 1 });
+        state.items.push({ ...action.payload });
       }
-      saveToLocalStorage(state.items); // Save updated cart to localStorage
-    },  
+      saveToLocalStorage(state.items); // Save updated favourites to localStorage
+    },
     removeFromFavourites: (state, action: PayloadAction<string>) => {
+      // Remove item by id
       state.items = state.items.filter(item => item.id !== action.payload);
-      saveToLocalStorage(state.items); // Save updated cart to localStorage}
-    }
+      saveToLocalStorage(state.items); // Save updated favourites to localStorage
+    },
   },
 });
 
