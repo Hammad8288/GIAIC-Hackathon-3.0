@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/app/redux/cartSlice";
 import { FaStar } from "react-icons/fa6";
 import { FaStarHalf } from "react-icons/fa";
@@ -13,20 +13,34 @@ import { IoIosHeartEmpty, IoIosHeart } from "react-icons/io";
 import AboveFooter from "./Components/AboveFooter";
 import { toast } from "sonner";
 import { addToFavourites, removeFromFavourites } from "./redux/favouriteSlice";
+import { RootState } from "./redux/store";
 
 const ProductsUI = ({ productdata }: { productdata: any }) => {
   const dispatch = useDispatch();
 
-  // Local state for favourite status
-  const [isFavourite, setIsFavourite] = useState(false);
+  // Get favorites from Redux state
+  const favorites = useSelector((state: RootState) => state.favourites.items);
 
-  // Load favourite status from localStorage when the component mounts
-  useEffect(() => {
-    const storedFavourite = localStorage.getItem(`favourite-${productdata.id}`);
-    if (storedFavourite) {
-      setIsFavourite(true);
+  // Check if the product is in favorites
+  const isFavourite = favorites.some((item) => item.id === productdata.id);
+
+  // Handle Add/Remove to/from Favorites
+  const toggleFavourite = () => {
+    if (isFavourite) {
+      dispatch(removeFromFavourites(productdata.id));
+      toast.success("Removed from favorites");
+    } else {
+      dispatch(
+        addToFavourites({
+          id: productdata.id,
+          name: productdata.name,
+          price: productdata.price,
+          imageURL: productdata.imageUrl,
+        })
+      );
+      toast.success("Added to favorites");
     }
-  }, [productdata.id]);
+  };
 
   // Handle Add to Cart
   const handleAddToCart = () => {
@@ -40,27 +54,6 @@ const ProductsUI = ({ productdata }: { productdata: any }) => {
         quantity: 1,
       })
     );
-  };
-
-  // Handle Add/Remove from Favourites
-  const toggleFavourite = () => {
-    setIsFavourite(!isFavourite);
-    if (!isFavourite) {
-      // Add item to favourites
-      dispatch(addToFavourites({
-        id: productdata.id,
-        name: productdata.name,
-        price: productdata.price,
-        imageURL: productdata.imageUrl,
-      }));
-      toast.success("Product added to favourites");
-      localStorage.setItem(`favourite-${productdata.id}`, "true");
-    } else {
-      // Remove item from favourites
-      dispatch(removeFromFavourites(productdata.id));
-      toast.success("Product removed from favourites");
-      localStorage.removeItem(`favourite-${productdata.id}`);
-    }
   };
 
   // Handle missing product data
@@ -116,7 +109,9 @@ const ProductsUI = ({ productdata }: { productdata: any }) => {
               <h1 className="text-[24px] lg:text-[42px] font-bold">
                 {productdata.name}
               </h1>
-              <h2 className="text-[18px] lg:text-[24px]">${productdata.price}</h2>
+              <h2 className="text-[18px] lg:text-[24px]">
+                ${productdata.price}
+              </h2>
               <h2 className="text-[14px] lg:text-[20px] mt-2">
                 Discount Percentage : {productdata.discountPercentage}%
               </h2>
@@ -149,19 +144,19 @@ const ProductsUI = ({ productdata }: { productdata: any }) => {
             <hr className="w-full sm:w-[601px] border-t-[2px] border-[#dbd8d8] mt-10" />
             {/* Additional Details */}
             <div className="mt-9 space-y-3 px-4 sm:px-0">
-              {[["Stock Level :", `${productdata.stockLevel}`],
+              {[
+                ["Stock Level :", `${productdata.stockLevel}`],
                 ["Category :", `${productdata.category}`],
-                ["Tags :", "Sofa, Chair, Home, Shop"]].map(
-                ([label, value], idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4"
-                  >
-                    <p className="text-[16px] text-[#9F9F9F]">{label}</p>
-                    <p className="text-[16px] text-[#9F9F9F]">{value}</p>
-                  </div>
-                )
-              )}
+                ["Tags :", "Sofa, Chair, Home, Shop"],
+              ].map(([label, value], idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4"
+                >
+                  <p className="text-[16px] text-[#9F9F9F]">{label}</p>
+                  <p className="text-[16px] text-[#9F9F9F]">{value}</p>
+                </div>
+              ))}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
                 <p className="text-[16px] text-[#9F9F9F]">Share</p>
                 <div className="flex flex-row gap-2 text-[23px] text-black">

@@ -4,19 +4,23 @@ import { useState } from "react";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa6";
-import { MdCancel } from "react-icons/md";
 import { TiThMenu } from "react-icons/ti";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SideBar from "./SideBar";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const [isCartOpen, setisCartOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const pathname = usePathname();
 
+  // Set background color of navbar based on pathname
   const navbarBgColor = pathname === "/" ? " bg-[#FBEBB5] " : "bg-white";
+
+  // Get favourite items from Redux store
+  const favourites = useSelector((state: any) => state.favourites.items);
+  const FavouriteCount = favourites.length;
 
   return (
     <div>
@@ -67,13 +71,26 @@ const Navbar = () => {
 
         {/* Icons Section */}
         <div className=" flex justify-center items-center space-x-4 sm:space-x-6 text-[20px] sm:text-[24px]  sm:mt-0">
+          
+          {/* Account */}
           <Link href={"/Accounts"}>
             <RiAccountCircleLine className="cursor-pointer" />
           </Link>
           <FiSearch className="cursor-pointer" />
+
+          {/* Favourites */}
           <Link href={"/Favourites"}>
-            <FaRegHeart className="cursor-pointer" />{" "}
+            <div className="relative">
+              <FaRegHeart className="text-[25px]" />
+              {FavouriteCount > 0 && (
+                <div className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1">
+                  {FavouriteCount}
+                </div>
+              )}
+            </div>
           </Link>
+
+          {/* Sidebar Toggle */}
           <SideBar />
         </div>
       </nav>

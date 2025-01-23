@@ -13,10 +13,6 @@ interface CartState {
   items: CartItem[];
 }
 
-interface UpdateQuantityPayload {
-  id: string;
-  type: "increase" | "decrease";
-}
 
 // Function to load cart items from localStorage (client-side only)
 const loadFromLocalStorage = (): CartItem[] => {
