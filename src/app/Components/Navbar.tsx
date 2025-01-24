@@ -170,7 +170,7 @@ const Navbar = () => {
                     <div className="ml-4">
                       <p className="text-sm font-bold">{product.name}</p>
                       <p className="text-sm text-gray-600">Price: ${product.price}</p>
-                      <p className="text-sm text-gray-600">Discounted Percentage: %{product.discountPercentage}</p>
+                      <p className="text-sm text-gray-600">Discounted Percentage: {product.discountPercentage}%</p>
                     </div>
                   </Link>
                 ))
