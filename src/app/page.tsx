@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     async function fetchData() {
       const res = await TopPicks();
-      console.log(res);
+      // console.log(res);
       setTopPicksData(res);
     }
     fetchData();

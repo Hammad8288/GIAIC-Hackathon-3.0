@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { IoFilter } from "react-icons/io5";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; 
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +19,8 @@ const FilterSection = () => {
   const [allProducts, setAllProducts] = useState([]); // Store all products
   const [products, setProducts] = useState([]); // Store filtered products
   const [filter, setFilter] = useState<string>("All"); // Store selected filter
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const itemsPerPage = 9; // Set how many items per page
 
   // Fetch products from Sanity
   useEffect(() => {
@@ -38,6 +41,7 @@ const FilterSection = () => {
   // Function to filter products based on the category
   const handleFilterChange = (category: string) => {
     setFilter(category);
+    setCurrentPage(1); // Reset to first page on filter change
 
     if (category === "All") {
       setProducts(allProducts);
@@ -48,6 +52,20 @@ const FilterSection = () => {
       setProducts(filtered);
     }
   };
+
+  // Get the products for the current page
+  const indexOfLastProduct = currentPage * itemsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Generate page numbers dynamically
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(products.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div>
@@ -87,7 +105,7 @@ const FilterSection = () => {
 
           {/* Showing Results */}
           <p className="text-sm md:text-base font-[400] text-black">
-            Showing {products.length} results for {filter}
+            Showing {currentProducts.length} results for {filter}
           </p>
         </div>
       </div>
@@ -96,7 +114,7 @@ const FilterSection = () => {
       <div className="bg-gray-50 py-8 mt-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product: any) => (
+            {currentProducts.map((product: any) => (
               <div
                 key={product.id}
                 className="bg-white shadow-lg rounded-lg overflow-hidden transition duration-500 transform hover:scale-105"
@@ -124,6 +142,44 @@ const FilterSection = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center mt-8">
+            <div className="flex items-center space-x-5">
+              {/* Previous Page Icon */}
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="disabled:opacity-50"
+              >
+                <FaArrowLeft className="w-6 h-6 text-gray-600 cursor-pointer" />
+              </button>
+
+              {/* Page Numbers */}
+              {pageNumbers.map((number) => (
+                <button
+                  key={number}
+                  onClick={() => paginate(number)}
+                  className={`px-3 py-1 rounded-md ${
+                    number === currentPage
+                      ? "bg-gray-600 text-white"
+                      : "bg-gray-200 text-gray-600"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+
+              {/* Next Page Icon */}
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === pageNumbers.length}
+                className="disabled:opacity-50"
+              >
+                <FaArrowRight className="w-6 h-6 text-gray-600 cursor-pointer" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

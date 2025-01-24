@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa6";
@@ -9,16 +8,49 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SideBar from "./SideBar";
 import { useSelector } from "react-redux";
+import { client } from "@/sanity/lib/client";
+import Image from "next/image";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
 
   const pathname = usePathname();
-
   // Set background color of navbar based on pathname
   const navbarBgColor = pathname === "/" ? " bg-[#FBEBB5] " : "bg-white";
 
-  // Get favourite items from Redux store
+  // Fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const query = `*[_type == "product"] {
+        id, name, "imageUrl": image.asset->url, price, "slug": slug.current, discountPercentage
+      }`;
+      const products = await client.fetch(query);
+      setAllProducts(products);
+      setFilteredProducts(products);
+    };
+    fetchProducts();
+  }, []);
+
+  // Search handling
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (query === "") {
+      setFilteredProducts(allProducts);
+    } else {
+      const filtered = allProducts.filter((product: any) =>
+        product.name.toLowerCase().includes(query)
+      );
+      setFilteredProducts(filtered);
+    }
+  };
+
+  // Get favourites count
   const favourites = useSelector((state: any) => state.favourites.items);
   const FavouriteCount = favourites.length;
 
@@ -27,17 +59,20 @@ const Navbar = () => {
       <nav
         className={`w-full h-[100px] bg-${navbarBgColor} flex sm:flex-row justify-between items-center px-4 sm:px-8 py-4`}
       >
+        {/* Mobile Menu Button */}
         <button
           className="text-black sm:hidden"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <TiThMenu />
+          <TiThMenu className="text-2xl" />
         </button>
+
+        {/* Navbar Links */}
         <div
           className={`${
-            isOpen ? "block" : "hidden"
+            isMenuOpen ? "block" : "hidden"
           } absolute sm:static top-20 left-0 w-full sm:w-auto sm:flex sm:flex-1 flex-col sm:flex-row items-center text-black text-[16px] font-[500] leading-[24px] z-50 ${
-            isOpen ? navbarBgColor : "bg-transparent"
+            isMenuOpen ? navbarBgColor : "bg-transparent"
           }`}
         >
           {/* Links Section */}
@@ -70,13 +105,18 @@ const Navbar = () => {
         </div>
 
         {/* Icons Section */}
-        <div className=" flex justify-center items-center space-x-4 sm:space-x-6 text-[20px] sm:text-[24px]  sm:mt-0">
-          
-          {/* Account */}
+        <div className="flex space-x-4 text-[25px] items-center">
           <Link href={"/Accounts"}>
             <RiAccountCircleLine className="cursor-pointer" />
           </Link>
-          <FiSearch className="cursor-pointer" />
+
+          {/* Search Icon */}
+          <div>
+            <FiSearch
+              className="cursor-pointer"
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+            />
+          </div>
 
           {/* Favourites */}
           <Link href={"/Favourites"}>
@@ -90,10 +130,57 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Sidebar Toggle */}
           <SideBar />
         </div>
       </nav>
+
+      {/* Search Popup */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white w-full max-w-3xl p-8 rounded-lg shadow-lg relative">
+            <button
+              className="absolute top-4 right-4 text-gray-600 text-xl"
+              onClick={() => setIsSearchOpen(false)}
+            >
+              ×
+            </button>
+            <h2 className="text-lg font-bold mb-4">Search Products</h2>
+            <input
+              type="text"
+              placeholder="Search for products..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="w-full p-3 border rounded-md focus:outline-none"
+            />
+            <div className="max-h-64 overflow-y-auto mt-4">
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product: any) => (
+                  <Link
+                    href={`/Shop/${product.slug}`}
+                    key={product.id}
+                    className="flex items-center p-4 border-b hover:bg-gray-100"
+                  >
+                    <Image
+                      width={64}
+                      height={64}
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-16 h-16 rounded-md object-cover"
+                    />
+                    <div className="ml-4">
+                      <p className="text-sm font-bold">{product.name}</p>
+                      <p className="text-sm text-gray-600">Price: ${product.price}</p>
+                      <p className="text-sm text-gray-600">Discounted Percentage: ${product.discountPercentage}</p>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500">No products found.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

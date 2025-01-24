@@ -100,7 +100,7 @@ const Sidebar = () => {
         {/* Fixed Checkout Button */}
         <div className="mt-4 border-t pt-4 ">
           <button className="w-full px-4 py-2 rounded border-[1px] border-black hover:bg-[#FBEBB5] transition duration-200">
-            <Link href={"/Cart"}> View Cart</Link>
+           <Link href={"/Cart"} > View Cart</Link>
           </button>
         </div>
       </SheetContent>
