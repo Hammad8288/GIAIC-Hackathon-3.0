@@ -130,4 +130,4 @@ Deploy the output folder to your preferred hosting platform.
 
 ---
 
-Thank you for exploring the project! For any queries, feel free to reach out via [your email/contact info].
+Thank you for exploring the project! For any queries, feel free to reach out via email : hammad82887@gmail.com
