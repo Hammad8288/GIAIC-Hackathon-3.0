@@ -73,6 +73,9 @@ This repository documents the hackathon project developed over six days, highlig
 
 ---
 
+![image](https://github.com/user-attachments/assets/57526804-7606-4716-9903-c39c768733f8)
+
+
 ## **Deployment Instructions**
 
 ### **Step 1: Clone the Repository**
