@@ -1,3 +1,5 @@
+
+//1.  Imports and Initial Setup
 "use client";
 
 import { client } from "@/sanity/lib/client";
@@ -12,9 +14,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger,  
 } from "@/components/ui/dropdown-menu";
 
+
+// 2. Component State Management
 const FilterSection = () => {
   const [allProducts, setAllProducts] = useState([]); // Store all products
   const [products, setProducts] = useState([]); // Store filtered products
@@ -22,7 +26,8 @@ const FilterSection = () => {
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const itemsPerPage = 9; // Set how many items per page
 
-  // Fetch products from Sanity
+ 
+  // 3. Fetch products from Sanity
   useEffect(() => {
     const fetchProducts = async () => {
       const query = `*[_type == "product"] {
@@ -38,7 +43,8 @@ const FilterSection = () => {
     fetchProducts();
   }, []);
 
-  // Function to filter products based on the category
+
+  // 4. Function to filter products based on the category
   const handleFilterChange = (category: string) => {
     setFilter(category);
     setCurrentPage(1); // Reset to first page on filter change
@@ -53,9 +59,13 @@ const FilterSection = () => {
     }
   };
 
-  // Get the products for the current page
-  const indexOfLastProduct = currentPage * itemsPerPage;
+  // 5. Pagination Logic
+  const indexOfLastProduct = currentPage * itemsPerPage; 
+  // If currentPage = 2 and itemsPerPage = 9, then:indexOfLastProduct=2×9=18
+
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+  // Continuing from the above, indexOfFirstProduct=18−9=9
+  
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
   // Change page

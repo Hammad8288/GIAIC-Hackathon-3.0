@@ -4,9 +4,10 @@ import Image from "next/image";
 import { ImBin2 } from "react-icons/im";
 import AboveFooter from "../Components/AboveFooter";
 import { FaChevronRight } from "react-icons/fa6";
-import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { updateQuantity, removeFromCart } from "@/app/redux/cartSlice";
+import { useClerk, useUser  } from '@clerk/nextjs';
+
 
 const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
@@ -17,13 +18,29 @@ const Cart = () => {
     0
   );
 
+  // handle quantity change and remove item from cart
   const handleQuantityChange = (id: string, type: string) => {
     dispatch(updateQuantity({ id, type }));
   };
 
+  
   const handleRemove = (id: string) => {
     dispatch(removeFromCart(id));
   };
+
+
+  // user authentication
+  const { isSignedIn } = useUser()
+  const { openSignIn } = useClerk(); 
+  const handleCheckoutClick = () => {
+    if (isSignedIn) {
+      // Navigate to checkout page
+      window.location.href = '/CheckOut';
+    } else {
+      openSignIn();
+    } 
+  };
+
   return (
     <>
       <div className="relative">
@@ -177,12 +194,12 @@ const Cart = () => {
 
               {/* Checkout Button */}
               <div className="flex justify-center mt-4">
-                <Link
-                  href={"/CheckOut"}
+                <button 
+                  onClick={handleCheckoutClick}
                   className="flex items-center justify-center text-center w-full sm:w-[200px] md:w-[250px] h-[40px] sm:h-[50px] md:h-[58px] rounded-lg text-sm text-black border-2 border-black hover:bg-black hover:text-white"
                 >
                   Check Out
-                </Link>
+                </button>
               </div>
             </div>
           </div>

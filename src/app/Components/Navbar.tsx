@@ -10,6 +10,8 @@ import SideBar from "./SideBar";
 import { useSelector } from "react-redux";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
+import { SignOutButton, useClerk } from '@clerk/nextjs';
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -21,6 +23,13 @@ const Navbar = () => {
   const pathname = usePathname();
   // Set background color of navbar based on pathname
   const navbarBgColor = pathname === "/" ? " bg-[#FBEBB5] " : "bg-white";
+
+  // Clerk setup
+  const { redirectToSignIn } = useClerk();
+   // Function to handle icon click and redirect to Clerk's login page
+   const handleIconClick = () => {
+    redirectToSignIn();
+  };
 
   // Fetch products
   useEffect(() => {
@@ -53,6 +62,7 @@ const Navbar = () => {
   // Get favourites count
   const favourites = useSelector((state: any) => state.favourites.items);
   const FavouriteCount = favourites.length;
+
 
   return (
     <div>
@@ -106,10 +116,14 @@ const Navbar = () => {
 
         {/* Icons Section */}
         <div className="flex space-x-4 text-[25px] items-center">
-          <Link href={"/Accounts"}>
-            <RiAccountCircleLine className="cursor-pointer" />
-          </Link>
+          <SignedOut>
+            <RiAccountCircleLine className="cursor-pointer" onClick={handleIconClick} />
+          </SignedOut>
 
+          {/* User Button */}
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
           {/* Search Icon */}
           <div>
             <FiSearch
@@ -142,7 +156,7 @@ const Navbar = () => {
               className="absolute top-4 right-4 text-gray-600 text-xl"
               onClick={() => setIsSearchOpen(false)}
             >
-              ×
+              x
             </button>
             <h2 className="text-lg font-bold mb-4">Search Products</h2>
             <input
