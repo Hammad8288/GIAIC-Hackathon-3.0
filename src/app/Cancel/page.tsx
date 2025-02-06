@@ -28,7 +28,7 @@ const CancelPage = () => {
           Order Canceled! ❌
         </h1>
         <p className="text-lg mb-6 text-gray-700">
-          We're sorry that your order was canceled. If you change your mind, feel free to shop again. We're always here to help!
+          We are sorry that your order was canceled. If you change your mind, feel free to shop again. We are always here to help!
         </p>
 
         <div className="mb-6 flex items-center justify-center">
