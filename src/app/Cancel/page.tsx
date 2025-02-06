@@ -41,7 +41,7 @@ const CancelPage = () => {
         </div>
 
         <p className="text-sm text-gray-500">
-          If you have any questions or need assistance, <a href="mailto:hammad82887@gmail.com" className="font-semibold text-[#B88E2F]">Contact Us</a>.
+          If you have any questions or need assistance, <a href="mailto:hammad82887@gmail.com" className="font-semibold text-[#B88E2F]">Contact with Us</a>.
         </p>
       </div>
     </div>

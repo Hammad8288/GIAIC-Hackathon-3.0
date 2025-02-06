@@ -28,7 +28,7 @@ const SuccessPage = () => {
           Order Placed Successfully! 🎉
         </h1>
         <p className="text-lg mb-6 text-gray-700">
-          Thank you for shopping with us. Your order has been placed successfully. We will get your items to you as soon as possible!
+          Thank you for shopping with us. Hope You will visit again. Your order has been placed successfully. We will get your items to you as soon as possible!
         </p>
         
         <div className="mb-6 flex items-center justify-center">
