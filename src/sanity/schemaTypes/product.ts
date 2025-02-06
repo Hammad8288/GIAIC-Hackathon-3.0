@@ -1,63 +1,67 @@
-export default {
+import { defineField, defineType } from "sanity";
+
+export default defineType({
     name: 'product',
     title: 'Product',
     type: 'document',
     fields: [
-      {
+      defineField({
         name: 'id',
         title: 'ID',
         type: 'string',
-      },
-      {
+      }),
+      defineField({
         name: 'name',
         title: 'Name',
         type: 'string',
-      },
-      {
+      }),
+      defineField({
         name: 'slug',
         title: 'Slug',
         type: 'slug',
         options: {
           source: 'name',
+          maxLength: 96,
         },
-      },
-      {
-        name: 'image', // Image field change here
+      }),
+      defineField({
+        name: 'image', 
         title: 'Image',
-        type: 'image', // Correct type to handle image references
+        type: 'image', 
         options: {
-          hotspot: true, // Enable image cropping for better control
+          hotspot: true, 
         },
-      },
-      {
+      }),
+      defineField({
         name: 'price',
         title: 'Price',
         type: 'number',
-      },
-      {
+      }),
+      defineField({
         name: 'description',
         title: 'Description',
         type: 'text',
-      },
-      {
+      }),
+      defineField({
         name: 'discountPercentage',
         title: 'Discount Percentage',
         type: 'number',
-      },
-      {
+      }),
+      defineField({
         name: 'isFeaturedProduct',
         title: 'Is Featured Product',
         type: 'boolean',
-      },
-      {
+      }),
+      defineField({
         name: 'stockLevel',
         title: 'Stock Level',
         type: 'number',
-      },
-      {
+      }),
+      defineField({
         name: 'category',
         title: 'Category',
         type: 'string',
-      },
+      }),
     ],
-  };
+  });
+  
