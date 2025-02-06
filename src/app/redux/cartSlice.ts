@@ -11,6 +11,7 @@ interface CartItem {
 
 interface CartState {
   items: CartItem[];
+  totalAmount: number;
 }
 
 
@@ -41,6 +42,7 @@ const saveToLocalStorage = (items: CartItem[]) => {
 // Lazy initialization for initial state
 const getInitialState = (): CartState => ({
   items: loadFromLocalStorage(),
+  totalAmount: 0,
 });
 
 // Create the cart slice
