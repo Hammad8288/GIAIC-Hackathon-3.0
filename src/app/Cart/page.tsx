@@ -6,8 +6,7 @@ import AboveFooter from "../Components/AboveFooter";
 import { FaChevronRight } from "react-icons/fa6";
 import { useSelector, useDispatch } from "react-redux";
 import { updateQuantity, removeFromCart } from "@/app/redux/cartSlice";
-import { useClerk, useUser  } from '@clerk/nextjs';
-
+import { useClerk, useUser } from "@clerk/nextjs";
 
 const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
@@ -23,22 +22,20 @@ const Cart = () => {
     dispatch(updateQuantity({ id, type }));
   };
 
-  
   const handleRemove = (id: string) => {
     dispatch(removeFromCart(id));
   };
 
-
   // user authentication
-  const { isSignedIn } = useUser()
-  const { openSignIn } = useClerk(); 
+  const { isSignedIn } = useUser();
+  const { openSignIn } = useClerk();
   const handleCheckoutClick = () => {
     if (isSignedIn) {
       // Navigate to checkout page
-      window.location.href = '/CheckOut';
+      window.location.href = "/CheckOut";
     } else {
       openSignIn();
-    } 
+    }
   };
 
   return (
@@ -69,14 +66,14 @@ const Cart = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-[1440px] h-[525px] bg-white flex justify-center items-center px-4 py-6">
+      <div className="max-w-[1440px] h-auto bg-white flex justify-center items-center px-4 py-6">
         {/* Main container */}
-        <div className="w-full md:w-[1240px] flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8">
+        <div className="w-full max-w-[1240px] flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8">
           {/* Left Section */}
           <div className="w-full md:w-[60%] rounded-md p-4">
             {/* Header Section */}
             <div className="w-full py-3 bg-[#FFF9E5] rounded-md px-4 sm:px-8">
-              <ul className="flex flex-wrap sm:flex-nowrap justify-between">
+              <ul className="grid grid-cols-4 text-center">
                 <li className="text-[14px] sm:text-[16px] font-semibold">
                   Product
                 </li>
@@ -93,74 +90,70 @@ const Cart = () => {
             </div>
 
             {/* Content Section */}
-            <div className="flex flex-col md:flex-nowrap gap-3 sm:gap-6 mt-4 justify-center items-center bg-white">
-              {/* Ensure cartItems exists */}
+            <div className="flex flex-col gap-4 mt-4 bg-white">
               {cartItems.length > 0 ? (
                 <div className="max-h-[350px] w-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                   {cartItems.map((item: any) => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-4 w-full"
+                      className="flex flex-col sm:flex-row items-center gap-4 w-full p-2 border-b"
                     >
                       {/* Product Image */}
-                      <div className="w-[106px] h-[106px] rounded-lg flex items-center justify-center">
+                      <div className="w-[80px] h-[80px] rounded-lg flex items-center justify-center">
                         <Image
                           src={item.imageURL}
                           alt={item.name}
                           width={200}
                           height={200}
-                          className="w-20 h-20 object-cover rounded"
+                          className="w-full h-full object-cover rounded"
                         />
                       </div>
 
                       {/* Product Details */}
-                      <div className="flex flex-col md:flex-row md:justify-around gap-4 w-full items-center">
-                        <ul className="flex flex-col items-center md:flex-row justify-between w-full gap-2">
-                          <li className="text-[12px] sm:text-[14px] md:text-[16px] text-[#9F9F9F]">
-                            {item.name}
-                          </li>
-                          <li className="text-[12px] sm:text-[14px] md:text-[16px] text-[#9F9F9F]">
-                            ${item.price}
-                          </li>
+                      <div className="flex flex-row justify-between items-center w-full gap-2 text-center sm:text-left">
+                        <p className="text-[14px] text-[#9F9F9F]">
+                          {item.name}
+                        </p>
+                        <p className="text-[14px] text-[#9F9F9F]">
+                          ${item.price}
+                        </p>
 
-                          <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() =>
-                                handleQuantityChange(item.id, "decrease")
-                              }
-                              className="px-2 py-1 bg-gray-200 rounded"
-                            >
-                              -
-                            </button>
-                            <p className="text-sm text-gray-500">
-                              Quantity: {item.quantity}
-                            </p>
-                            <button
-                              onClick={() =>
-                                handleQuantityChange(item.id, "increase")
-                              }
-                              className="px-2 py-1 bg-gray-200 rounded"
-                            >
-                              +
-                            </button>
-                          </div>
-                          <li className="text-[12px] sm:text-[14px] md:text-[16px] text-[#9F9F9F]">
-                            SubTotal : <br /> $ {totalPrice.toFixed(2)}
-                          </li>
-                        </ul>
-                        {/* Trash Icon */}
-                        <button
-                          className="mt-2 sm:mt-0"
-                          onClick={() => handleRemove(item.id)}
-                        >
-                          <ImBin2 className="text-[#f5e09d] text-base sm:text-lg md:text-xl cursor-pointer" />
-                        </button>
+                        <div className="flex items-center justify-center space-x-2">
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(item.id, "decrease")
+                            }
+                            className="px-2 py-1 bg-gray-200 rounded"
+                          >
+                            -
+                          </button>
+                          <p className="text-sm text-gray-500">
+                            {item.quantity}
+                          </p>
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(item.id, "increase")
+                            }
+                            className="px-2 py-1 bg-gray-200 rounded"
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <p className="text-[14px] text-[#9F9F9F]">
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </p>
+                      <button onClick={() => handleRemove(item.id)}>
+                        <ImBin2 className="text-[#f5e09d] text-lg cursor-pointer" />
+                      </button>
                       </div>
+
+                      {/* Delete Button */}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-[16px] text-[#9F9F9F] w-full">
+                <p className="text-center text-[16px] text-[#9F9F9F]">
                   No items in the cart.
                 </p>
               )}
@@ -169,34 +162,27 @@ const Cart = () => {
 
           {/* Right Section */}
           <div className="w-full md:w-[35%] bg-[#FFF9E5] rounded-md p-4">
-            {/* Title Section */}
-            <h1 className="text-[20px] sm:text-[24px] md:text-[28px] text-black text-center">
+            <h1 className="text-[20px] sm:text-[24px] text-black text-center">
               Cart Totals
             </h1>
 
-            {/* Content Section */}
-            <div className="flex flex-col gap-4 sm:gap-6 mt-4">
-              {/* Subtotal */}
+            <div className="flex flex-col gap-4 mt-4">
               <div className="flex justify-between">
-                <h2 className="text-[14px] sm:text-[16px]">Subtotal</h2>
-                <h2 className="text-[14px] sm:text-[16px] text-[#9F9F9F]">
+                <h2 className="text-[14px]">Subtotal</h2>
+                <h2 className="text-[14px] text-[#9F9F9F]">
                   ${totalPrice.toFixed(2)}
                 </h2>
               </div>
-
-              {/* Total */}
               <div className="flex justify-between">
-                <h2 className="text-[14px] sm:text-[16px]">Total</h2>
-                <h2 className="text-[14px] sm:text-[16px] text-[#9F9F9F]">
+                <h2 className="text-[14px]">Total</h2>
+                <h2 className="text-[14px] text-[#9F9F9F]">
                   ${totalPrice.toFixed(2)}
                 </h2>
               </div>
-
-              {/* Checkout Button */}
               <div className="flex justify-center mt-4">
-                <button 
+                <button
                   onClick={handleCheckoutClick}
-                  className="flex items-center justify-center text-center w-full sm:w-[200px] md:w-[250px] h-[40px] sm:h-[50px] md:h-[58px] rounded-lg text-sm text-black border-2 border-black hover:bg-black hover:text-white"
+                  className="w-full sm:w-[200px] h-[50px] rounded-lg text-sm text-black border-2 border-black hover:bg-black hover:text-white"
                 >
                   Check Out
                 </button>
@@ -205,6 +191,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
       <AboveFooter />
     </>
   );
